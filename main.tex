@@ -297,9 +297,100 @@ There is also an About window to display information on author and versions of l
     }
 
     \column{0.33}
-    \block{IPC}{}
+    \block{Application Functions}
+    {
+\tikzstyle{block} = [rectangle, minimum width=4cm, minimum height=1cm, text centered, draw={rgb:red,0;green,102;blue,168}, fill={rgb:red,0;green,102;blue,168}, text=white]
+
+\tikzstyle{arrow} = [thick,->,>=stealth]
+
+\centering
+\begin{tikzpicture}[node distance=3cm]
+
+\node (truthtable) [block] {Truth table};
+
+\node (blocks) [block, below of=truthtable, yshift=1cm] {Buttom-level blocks};
+
+\node (otherblocks) [block, below of=blocks, yshift=1cm] {Other high-level blocks};
+
+\node (highlevelblocks) [block, right of=blocks, xshift=3cm] {High-level blocks};
+
+\node (Verilog) [block, right of=highlevelblocks, xshift = 3cm, yshift=-1.5cm] {Verilog};
+
+\node (highleveldesign) [block, above of=Verilog] {Higher-level design};
+
+\draw [arrow] (truthtable) -- (highlevelblocks);
+
+\draw [arrow] (blocks) -- (highlevelblocks);
+
+\draw [arrow] (otherblocks) -- (highlevelblocks);
+
+\draw [arrow] (highlevelblocks) -- (Verilog);
+
+\draw [arrow] (highlevelblocks) -- (highleveldesign);
+
+\end{tikzpicture}
+    }
     
-    \block{Project Outcome}{}
+    \block{IPC}
+    {
+\tikzstyle{block} = [rectangle, minimum width=4cm, minimum height=1cm, text centered, draw={rgb:red,0;green,102;blue,168}, fill={rgb:red,0;green,102;blue,168}, text=white]
+
+\tikzstyle{arrow} = [thick,->,>=stealth]
+
+\begin{tikzpicture}[node distance=3cm]
+
+\node (renderer) [block] {Renderer process};
+
+\node (main) [block, right of=nodejs, xshift=6cm] {Main process};
+
+\draw [arrow] (renderer) -- ++ (0, 1) -- ++ (7, 0) node[midway, fill=white] {IPCRenderer} -- (main) ; 
+
+\draw [arrow] (main) -- ++ (0, -1) -- ++ (-7, 0) node[midway, fill=white] {IPCMain} -- (renderer);
+
+\end{tikzpicture}    
+
+\begin{tikzpicture}[node distance=3cm]
+
+\node (renderer) [block] {Renderer process};
+
+\node (main) [block, right of=renderer, xshift=6cm] {Main process};
+
+\node (systemAPI) [block, right of=main, xshift=6cm] {System API};
+
+\draw [arrow] (renderer) -- (main) node[midway, fill=white] {\circled{1}\textit{remote} call};
+
+\draw [arrow] (main) -- ++ (0, 1) -- ++ (7, 0) node[midway, fill=white] {\circled{2}API call} -- (systemAPI);
+
+\draw [arrow] (systemAPI) -- ++ (0, -1) -- ++ (-7, 0) node[midway, fill=white] {\circled{3}Response} -- (main);
+
+\end{tikzpicture}
+
+\begin{tikzpicture}[node distance=3cm]
+
+\node (renderer1) [block] {Renderer process 1};
+
+\node (main) [block, right of=renderer, xshift=6cm] {Main process};
+
+\node (renderer2) [block, right of=main, xshift=6cm] {Renderer process 2};
+
+\draw [arrow] (renderer1) -- (main) node[midway, fill=white] {\circled{1}\textit{IPCRenderer}};
+
+\draw [arrow] (main) -- (renderer2) node[midway, fill=white] {\circled{2}\textit{IPCMain}};
+
+\end{tikzpicture}
+
+IPC is the abbreviation for Inter-Process Communication. It is used when the communication between processes is needed. The application uses IPC to pass information between windows using the main process as a relay.
+
+    }
+    
+    \block{Project Outcome}
+    {
+    \begin{itemize}
+        \item F\# bindings for using \textit{JointJS}.
+        \item An application that generates Verilog for synchronous digital hardware design from a graphical design and truth tables.
+        \item A proof that \textit{F\# + Electron} is a feasible way to implement desktop application. The desktop application combines the JavaScript ecosystem and the static typing feature of function programming together with the help of Fable.
+    \end{itemize}
+    }
     
 \end{columns}
  
