@@ -2,21 +2,22 @@
 \usepackage[utf8]{inputenc}
  
 \title{A high level Schematic editor for simplified HDL Entry}
-\author{Lei Wang (Wilson)}
+\author{Supervisor: Dr Thomas J.W. Clarke \\ Student: Lei Wang (Wilson)}
 \date{June, 27th, 2019}
-\institute{Imperial College London}
+\institute{Imperial College London, the 27th of June, 2019}
 
 \usepackage{blindtext}
 \usepackage{comment}
 \usepackage{graphicx}
 \usepackage{booktabs}
+\usepackage{url}
 
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric, arrows, positioning, fit,calc}
 \newcommand*\circled[1]{\tikz[baseline=(char.base)]{
             \node[shape=circle,draw,inner sep=1pt] (char) {#1};}}
  
-% \usetheme{Default}
+\usetheme{Default}
  
 \begin{document}
  
@@ -24,7 +25,7 @@
 
 \begin{columns}
     \column{0.33}
-    \block{Abstract}
+    \block{Abstract}    
     {The project aims to produce a piece of software that is used as a high level schematic editor for simplified HDL (Hardware Description Language) Entry by the first-year undergraduate students at Imperial College London studying digital electronics doing synchronous FPGA (Field Programmable Gate Array) digital hardware design. The software is very similar to the Visual2 project in structure of the application stack. The project itself is a combination of the third-year High Level Programming course and the first-and-second-year Digital Electronics course. The implementation involves the use of functional programming and the knowledge of Verilog.}
     
     \block{Feature}
@@ -51,9 +52,9 @@
 
 \node (user) [block, right of=webcontent, xshift=6cm] {User};
 
-\node (browser) [block, below of=user, yshift=-1cm] {Electron window};
+\node (browser) [block, below of=user] {Electron window};
 
-\node (systemapi) [block, below of=nodejs, yshift=-1cm] {System API};
+\node (systemapi) [block, below of=nodejs] {System API};
 
 \draw [arrow] (nodejs) -- (webcontent) node[midway, fill=white] {\circled{1}Deliver};
 
@@ -178,14 +179,11 @@
 
 \end{tikzpicture}    
 
-Each window has one renderer process. The application can have multiple windows hence multiple renderer processes. However, the application can only have one main process. 
-
-Each process corresponds to one F\# project.
+The application can have multiple renderer processes but only have one main process. Each process corresponds to one F\# project.
     }
     
     \block{Application Windows}
     {
-The main window has the following structure:
 
 \begin{tikzpicture}[node distance=1.5cm]
 
@@ -217,7 +215,7 @@ The main window has the following structure:
 
 \tikzstyle{arrow} = [thick,->,>=stealth]
 
-The window for creating basic logic blocks has the following structure:
+The above shows the main window and the below shows the window for creating basic logic blocks:
 
 \begin{tikzpicture}[node distance=1.5cm][Window to add basic logic blocks]
 
@@ -381,15 +379,22 @@ There is also an About window to display information on author and versions of l
 
 IPC is the abbreviation for Inter-Process Communication. It is used when the communication between processes is needed. The application uses IPC to pass information between windows using the main process as a relay.
 
+Note that for communication between two renderer processes, the \textit{remote} module is an alternative way to access the main process as a relay.
+
     }
     
     \block{Project Outcome}
     {
     \begin{itemize}
-        \item F\# bindings for using \textit{JointJS}.
-        \item An application that generates Verilog for synchronous digital hardware design from a graphical design and truth tables.
-        \item A proof that \textit{F\# + Electron} is a feasible way to implement desktop application. The desktop application combines the JavaScript ecosystem and the static typing feature of function programming together with the help of Fable.
+        \item F\# bindings for using the  \textit{JointJS} JavaScript drawing library.
+        \item An application that generates Verilog for synchronous digital hardware design from a graphical design and truth tables. The code is available at \url{https://github.com/ImperialCollegeLondon/HDL_Editor}.
+        \item A verification that F\# + Electron is a feasible way to implement desktop application. The desktop application combines the JavaScript ecosystem and the static typing feature of function programming together with the help of Fable.
     \end{itemize}
+    }
+    
+    \block{Acknowledgement}
+    {
+    I would like to thank Dr Clarke for supervising my project and providing advice on writing F\# code and using Fable for interop with JavaScript. I would also like to thank Zaid Ajaj and Alfonso Garcia-Caro, the authors of Fable, for answering my questions on GitHub regarding Fable version issues.
     }
     
 \end{columns}
