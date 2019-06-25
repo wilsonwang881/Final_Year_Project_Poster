@@ -1,4 +1,4 @@
-\documentclass[20pt, a1paper, landscape]{tikzposter}
+\documentclass[12pt, a1paper, landscape]{tikzposter}
 \usepackage[utf8]{inputenc}
  
 \title{A high level Schematic editor for simplified HDL Entry}
@@ -8,8 +8,13 @@
 
 \usepackage{blindtext}
 \usepackage{comment}
+
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows, positioning, fit,calc}
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+            \node[shape=circle,draw,inner sep=1pt] (char) {#1};}}
  
-\usetheme{Desert}
+\usetheme{Default}
  
 \begin{document}
  
@@ -17,24 +22,179 @@
 
 \begin{columns}
     \column{0.33}
-    \block{More text}{Text and more text}
+    \block{Abstract}
+    {The project aims to produce a piece of software that is used as a high level schematic editor for simplified HDL (Hardware Description Language) Entry by the first-year undergraduate students at Imperial College London studying digital electronics doing synchronous FPGA (Field Programmable Gate Array) digital hardware design. The software is very similar to the Visual2 project in structure of the application stack. The project itself is a combination of the third-year High Level Programming course and the first-and-second-year Digital Electronics course. The implementation involves the use of functional programming and the knowledge of Verilog.}
+    
+    \block{Feature}
+    {
+    
+\begin{itemize}
+    \item The software is a graphical design tool for FPGA hardware design. For creating custom logic blocks, user can either fill in truth tables to generate standalone blocks, or connect different logic blocks together to form a higher level block.
+    \item The application is designed to be cross-platform, either for production use or development purposes.
+    \item Although the source code is in F\#, interop with JavaScript is made possible by Fable.
+\end{itemize}
+    }
+    
+    \block{Electron Framework}
+    {
+\tikzstyle{block} = [rectangle, minimum width=4cm, minimum height=1cm, text centered, draw=black, fill=gray!30]
+
+\tikzstyle{arrow} = [thick,->,>=stealth]
+
+\begin{tikzpicture}[node distance=3cm]
+
+\node (nodejs) [block] {Electron};
+
+\node (webcontent) [block, right of=nodejs, xshift=6cm] {Web content};
+
+\node (user) [block, right of=webcontent, xshift=6cm] {User};
+
+\node (browser) [block, below of=user, yshift=-1cm] {Electron window};
+
+\node (systemapi) [block, below of=nodejs, yshift=-1cm] {System API};
+
+\draw [arrow] (nodejs) -- (webcontent) node[midway, fill=white] {\circled{1}Deliver};
+
+\draw [arrow] (webcontent) -- (browser) node[midway, fill=white] {\circled{2}Render and Display in};
+
+\draw [arrow] (user) -- (browser) node[midway, fill=white] {\circled{3}React to};
+
+\draw [arrow] (browser) -- ++ (-8, 0) node[midway, fill=white] {\circled{4}Send user response to} -- (nodejs) ; 
+
+\draw [arrow] (nodejs) -- (systemapi) node[midway, fill=white] {\circled{5}Interact with};
+
+\end{tikzpicture}    
+
+    }
+    
+    \block{Application Stack}
+    {
+\tikzstyle{block} = [rectangle, minimum width=4cm, minimum height=1cm, text centered, draw=black, fill=gray!30]
+
+\tikzstyle{blockInclude} = [rectangle, minimum width=5cm, minimum height=1cm, draw=black]
+
+\tikzstyle{blockIncludeLarge} = [rectangle, minimum width=5cm, minimum height=1cm, draw=black]
+
+\tikzstyle{arrow} = [thick,->,>=stealth]
+
+
+\begin{tikzpicture}[node distance=2.3cm]
+
+\node (electronAPI) [block] {Electron API};
+
+\node (JSLib) [block, right of=electronAPI, xshift=4cm] {JavaScript Library};
+
+\node (fableImport) [block, below of=electronAPI] {Fable.Import};
+
+\node (fableJsInterop) [block, below of=JSLib] {Fable.Core.JsInterop};
+
+\node (fsharpProject) [blockInclude, below of=fableImport] {};
+
+\node [anchor=north west] at (fsharpProject.north west) {F\# Projects};
+
+\node (compiler) [block, right of=fsharpProject, xshift=6cm] {Fable compiler};
+
+\node (webpack) [block, below of=compiler] {Webpack};
+
+\node (webpackConfig) [block, right of=compiler, xshift=5cm] {Webpack configuration};
+
+\node (js) [blockIncludeLarge, below of=webpack] {};
+
+\node [anchor=north west] at (js.north west) {JavaScript Code};
+
+\node (html) [blockInclude, below of=fsharpProject, yshift=-1.5cm] {};
+
+\node [anchor=north west] at (html.north west) {HTML, CSS};
+
+\node (electron) [block, below of=js] {Electron};
+
+\node (browser) [block, right of=electron, xshift=3cm] {Application};
+
+\draw [arrow] (electronAPI) -- (fableImport);
+
+\draw [arrow] (JSLib) -- (fableJsInterop);
+
+\draw [arrow] (fableImport) -- (fsharpProject);
+
+\draw [arrow] (fableJsInterop) -- (fsharpProject.north east);
+
+\draw [arrow] (fsharpProject) -- (compiler);
+
+\draw [arrow] (compiler) -- (webpack);
+
+\draw [arrow] (webpackConfig) |- (webpack);
+
+\draw [arrow] (webpack) -- (js);
+
+\draw [arrow] (html) |- (electron);
+
+\draw [arrow] (js) -- (electron);
+
+\draw [arrow] (electron) -- (browser);
+
+\end{tikzpicture}
+
+    }
  
     \column{0.33}
-    \block{Something else}{Here, \blindtext \vspace{4cm}}
+    \block{Electron Processes and F\# Projects}
+    {
+\tikzstyle{blockInclude} = [rectangle, minimum width=22cm, minimum height=7cm, draw=black]
+
+\tikzstyle{blockSmall} = [rectangle, minimum width=6cm, minimum height=6cm, draw=black]
+
+\tikzstyle{block} = [rectangle, minimum width=3.5cm, minimum height=1cm, text centered, draw=black, fill=gray!30]
+
+\begin{tikzpicture}[node distance=4cm]
+
+\node (electronapplication) [blockInclude] {};
+
+\node [anchor=north west] at (electronapplication.north west) {Electron application};
+
+\node [anchor=east] at (electronapplication.east) {More windows...};
+
+\node (page1) [blockSmall, right of=electronapplication, xshift=-7cm] {};
+
+\node [anchor=north west] at (page1.north west) {Window 1};
+
+\node (page2) [blockSmall, right of=page1, xshift=3cm] {};
+
+\node [anchor=north west] at (page2.north west) {Window 2};
+
+\node (main) [block, right of=electronapplication, xshift=-13cm, yshift=1.5cm] {Main process};
+
+\node (renderer1) [block, right of=main, xshift=1.5cm] {Renderer process 1};
+
+\node (html1) [block, below of=renderer1, yshift=2.5cm] {HTML file 1};
+
+\node (style1) [block, below of=html1, yshift=2.5cm] {Styling file 1};
+
+\node (renderer2) [block, right of=renderer1, xshift=3cm] {Renderer process 2};
+
+\node (html2) [block, below of=renderer2, yshift=2.5cm] {HTML file 2};
+
+\node (style2) [block, below of=html2, yshift=2.5cm] {Styling file 2};
+
+\end{tikzpicture}    
+
+Each window has one renderer process. The application can have multiple windows hence multiple renderer processes. However, the application can only have one main process. 
+
+Each process corresponds to one F\# project.
+    }
+    
+    \block{Main Window Design}
+    {
+    
+    }
+    
+    \block{New Logic Block Window Design}
+    {
+    
+    }
         
     \column{0.33}
     \block{Something else}{Here, \blindtext \vspace{4cm}}
     
-\end{columns}
-
-\begin{columns}
-    \column{0.5}
-    \block{A figure}
-    {
-        something
-    }
-    \column{0.5}
-    \block{Description of the figure}{\blindtext}
 \end{columns}
  
 \end{document}
