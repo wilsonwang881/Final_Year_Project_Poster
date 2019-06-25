@@ -1,14 +1,40 @@
-\documentclass{article}
+\documentclass[20pt, a1paper, landscape]{tikzposter}
 \usepackage[utf8]{inputenc}
+ 
+\title{A high level Schematic editor for simplified HDL Entry}
+\author{Lei Wang (Wilson)}
+\date{June, 27th, 2019}
+\institute{Imperial College London}
 
-\title{Final_Year_Project_Poster}
-\author{lei.wang116 }
-\date{June 2019}
-
+\usepackage{blindtext}
+\usepackage{comment}
+ 
+\usetheme{Desert}
+ 
 \begin{document}
-
+ 
 \maketitle
 
-\section{Introduction}
+\begin{columns}
+    \column{0.33}
+    \block{More text}{Text and more text}
+ 
+    \column{0.33}
+    \block{Something else}{Here, \blindtext \vspace{4cm}}
+        
+    \column{0.33}
+    \block{Something else}{Here, \blindtext \vspace{4cm}}
+    
+\end{columns}
 
+\begin{columns}
+    \column{0.5}
+    \block{A figure}
+    {
+        something
+    }
+    \column{0.5}
+    \block{Description of the figure}{\blindtext}
+\end{columns}
+ 
 \end{document}
