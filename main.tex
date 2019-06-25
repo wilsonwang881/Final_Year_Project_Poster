@@ -1,4 +1,4 @@
-\documentclass[12pt, a1paper, landscape]{tikzposter}
+\documentclass[12pt, a1paper, landscape, margin=10mm, innermargin=15mm, blockverticalspace=15mm, colspace=15mm, subcolspace=8mm]{tikzposter}
 \usepackage[utf8]{inputenc}
  
 \title{A high level Schematic editor for simplified HDL Entry}
@@ -8,13 +8,15 @@
 
 \usepackage{blindtext}
 \usepackage{comment}
+\usepackage{graphicx}
+\usepackage{booktabs}
 
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric, arrows, positioning, fit,calc}
 \newcommand*\circled[1]{\tikz[baseline=(char.base)]{
             \node[shape=circle,draw,inner sep=1pt] (char) {#1};}}
  
-\usetheme{Default}
+% \usetheme{Default}
  
 \begin{document}
  
@@ -37,7 +39,7 @@
     
     \block{Electron Framework}
     {
-\tikzstyle{block} = [rectangle, minimum width=4cm, minimum height=1cm, text centered, draw=black, fill=gray!30]
+\tikzstyle{block} = [rectangle, minimum width=4cm, minimum height=1cm, text centered, draw={rgb:red,0;green,102;blue,168}, fill={rgb:red,0;green,102;blue,168}, text=white]
 
 \tikzstyle{arrow} = [thick,->,>=stealth]
 
@@ -69,7 +71,7 @@
     
     \block{Application Stack}
     {
-\tikzstyle{block} = [rectangle, minimum width=4cm, minimum height=1cm, text centered, draw=black, fill=gray!30]
+\tikzstyle{block} = [rectangle, minimum width=4cm, minimum height=1cm, text centered, draw={rgb:red,0;green,102;blue,168}, fill={rgb:red,0;green,102;blue,168}, text=white]
 
 \tikzstyle{blockInclude} = [rectangle, minimum width=5cm, minimum height=1cm, draw=black]
 
@@ -77,12 +79,11 @@
 
 \tikzstyle{arrow} = [thick,->,>=stealth]
 
-
-\begin{tikzpicture}[node distance=2.3cm]
+\begin{tikzpicture}[node distance=2cm]
 
 \node (electronAPI) [block] {Electron API};
 
-\node (JSLib) [block, right of=electronAPI, xshift=4cm] {JavaScript Library};
+\node (JSLib) [block, right of=electronAPI, xshift=6cm] {JavaScript Library};
 
 \node (fableImport) [block, below of=electronAPI] {Fable.Import};
 
@@ -143,7 +144,7 @@
 
 \tikzstyle{blockSmall} = [rectangle, minimum width=6cm, minimum height=6cm, draw=black]
 
-\tikzstyle{block} = [rectangle, minimum width=3.5cm, minimum height=1cm, text centered, draw=black, fill=gray!30]
+\tikzstyle{block} = [rectangle, minimum width=4cm, minimum height=1cm, text centered, draw={rgb:red,0;green,102;blue,168}, fill={rgb:red,0;green,102;blue,168}, text=white]
 
 \begin{tikzpicture}[node distance=4cm]
 
@@ -161,7 +162,7 @@
 
 \node [anchor=north west] at (page2.north west) {Window 2};
 
-\node (main) [block, right of=electronapplication, xshift=-13cm, yshift=1.5cm] {Main process};
+\node (main) [block, right of=electronapplication, xshift=-12.5cm, yshift=1.5cm] {Main process};
 
 \node (renderer1) [block, right of=main, xshift=1.5cm] {Renderer process 1};
 
@@ -182,18 +183,123 @@ Each window has one renderer process. The application can have multiple windows 
 Each process corresponds to one F\# project.
     }
     
-    \block{Main Window Design}
+    \block{Application Windows}
     {
-    
+The main window has the following structure:
+
+\begin{tikzpicture}[node distance=1.5cm]
+
+\node (window) [rectangle, minimum width=16cm, minimum height=9cm, draw=black] {};
+
+\node [anchor=west] at (-8,4.25) {Title bar};
+
+\node [anchor=west] at (-8,3.75) {Menu bar};
+
+\node [anchor=west] at (-8,3.15) {Tabs};
+
+\node [anchor=west] at (4,2.5) {Information pane};
+
+\node [anchor=west] at (4,-1.3) {Block pane};
+
+\node [anchor=west] at (-2.5,-1) {Canvas};
+
+\draw (-8,4) -- (8,4);
+
+\draw (-8,3.5) -- (8,3.5);
+
+\draw (-8,2.8) -- (8,2.8);
+
+\draw (4,2.8) -- (4,-4.5);
+
+\draw (4,-1) -- (8,-1);
+
+\end{tikzpicture}
+
+\tikzstyle{arrow} = [thick,->,>=stealth]
+
+The window for creating basic logic blocks has the following structure:
+
+\begin{tikzpicture}[node distance=1.5cm][Window to add basic logic blocks]
+
+\node (window) [rectangle, minimum width=14cm, minimum height=15cm, draw=black] {};
+
+\node [anchor=west] at (-7,7.2) {Create new logic blocks};
+
+\node [anchor=west] at (-7,6) {Type:};
+
+\node (type) [rectangle, minimum width=4cm, minimum height=0.8cm, draw=black] at (-3.5,6) {};
+
+\node (enterName) [anchor=west] at (7.5,6) {\circled{1}Enter block name};
+
+\draw [arrow] (enterName) -- (type);
+
+\node [anchor=west] at (-7,4.6) {Number of inputs:};
+
+\node (enterInput) [anchor=west] at (7.5,4.6) {\circled{2}Enter number of inputs};
+
+\node (inputNumber) [rectangle, minimum width=4cm, minimum height=0.8cm, draw=black] at (-0.8,4.6) {};
+
+\draw [arrow] (enterInput) -- (inputNumber);
+
+\node [anchor=west] at (-7,3.2) {Number of outputs:};
+
+\node (outputNumber) [rectangle, minimum width=4cm, minimum height=0.8cm, draw=black] at (-0.6,3.2) {};
+
+\node (enterOutput) [anchor=west] at (7.5,3.2) {\circled{3}Enter number of outputs};
+
+\draw [arrow] (enterOutput) -- (outputNumber);
+
+\draw (-7,6.9) -- (7,6.9);
+
+\draw (-7,2.5) -- (7,2.5);
+
+\node [anchor=west] at (-7,1.5) {in0};
+
+\node (in0) [rectangle, minimum width=4cm, minimum height=0.8cm, draw=black] at (-4,1.5) {};
+
+\node (namePorts) [anchor=west] at (7.5,1.5) {\circled{4}Name each port.*};
+
+\draw [arrow] (namePorts) -- (in0);
+
+\node [anchor=west] at (-7,0.1) {...};
+
+\draw (-7, -0.5) -- (7,-0.5);
+
+\node [anchor=west] at (-7, -1) {Truth table};
+
+\node (truthTable) [rectangle, minimum width=2cm, minimum height=0.5cm, draw=black] at (-1.5,-1) {Configure truth table};
+
+\node (truthTableButton) [anchor=west] at (7.5,-1) {\circled{5}Click to expand truth table. Fill in.};
+
+\draw [arrow] (truthTableButton) -- (truthTable);
+
+\draw (-7, -3.5) -- (7,-3.5);
+
+\node [anchor=west] at (-7, -4) {Block diagram};
+
+\node (blockView) [rectangle, minimum width=2cm, minimum height=0.5cm, draw=black] at (-1,-4) {Generate block view};
+
+\node (truthTableButton) [anchor=west] at (7.5,-4) {\circled{6}(Optional) Click to view block shape.};
+
+\draw [arrow] (truthTableButton) -- (blockView);
+
+\node (OK) [rectangle, minimum width=1cm, minimum height=0.5cm, draw=black] at (3.5,-7) {OK};
+
+\node (Cancel) [rectangle, minimum width=1cm, minimum height=0.5cm, draw=black] at (5.5,-7) {Cancel};
+
+\node (OKClick) [anchor=west] at (7.5,-6) {\circled{7}Click to submit data.};
+
+\draw [arrow] (OKClick) -| (OK);
+
+\end{tikzpicture}
+
+There is also an About window to display information on author and versions of libraries. It is not put in a dedicated F\# project but instead implemented using the \textit{dialog.showMessageBox} API from Electron.
     }
-    
-    \block{New Logic Block Window Design}
-    {
-    
-    }
-        
+
     \column{0.33}
-    \block{Something else}{Here, \blindtext \vspace{4cm}}
+    \block{IPC}{}
+    
+    \block{Project Outcome}{}
     
 \end{columns}
  
