@@ -2,9 +2,9 @@
 \usepackage[utf8]{inputenc}
  
 \title{A high level Schematic editor for simplified HDL Entry}
-\author{Supervisor: Dr Thomas J.W. Clarke \\ Student: Lei Wang (Wilson)}
+\author{Student: Lei Wang (Wilson)}
 \date{June, 27th, 2019}
-\institute{Imperial College London, the 27th of June, 2019}
+\institute{Imperial College London}
 
 \usepackage{blindtext}
 \usepackage{comment}
@@ -12,15 +12,55 @@
 \usepackage{booktabs}
 \usepackage{url}
 
+\definetitlestyle{sampletitle}{
+width=500mm, roundedcorners=20, linewidth=2pt, innersep=5pt,
+titletotopverticalspace=15mm, titletoblockverticalspace=15mm
+}{
+\begin{scope}[line width=\titlelinewidth, rounded corners=\titleroundedcorners]
+\draw[color=blocktitlebgcolor, fill=titlebgcolor]
+(\titleposleft,\titleposbottom) rectangle (\titleposright,\titlepostop);
+\end{scope}
+}
+\usetitlestyle{sampletitle}
+
+\defineblockstyle{sampleblockstyle}{
+titlewidthscale=1, bodywidthscale=1,titleleft,
+titleoffsetx=0pt, titleoffsety=0pt, bodyoffsetx=0mm, bodyoffsety=10mm,
+bodyverticalshift=10mm, roundedcorners=5, linewidth=3pt,
+titleinnersep=6mm, bodyinnersep=0.8cm
+}{
+\draw[color=framecolor, fill=blockbodybgcolor,
+rounded corners=\blockroundedcorners] (blockbody.south west)
+rectangle (blockbody.north east);
+\ifBlockHasTitle
+\draw[color=framecolor, fill=blocktitlebgcolor,
+rounded corners=\blockroundedcorners] (blocktitle.south west)
+rectangle (blocktitle.north east);
+\fi
+}
+\useblockstyle{sampleblockstyle} 
+
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric, arrows, positioning, fit,calc}
 \newcommand*\circled[1]{\tikz[baseline=(char.base)]{
             \node[shape=circle,draw,inner sep=1pt] (char) {#1};}}
  
-\usetheme{Default}
- 
 \begin{document}
- 
+
+
+\settitle{ \centering \vbox{
+\@titlegraphic \\[\TP@titlegraphictotitledistance] \centering
+\color{titlefgcolor} {\bfseries \Huge \sc \@title \par}
+\vspace*{1em}
+{\LARGE Supervisor: Dr Thomas J.W. Clarke \par} 
+\vspace*{1em}
+{\LARGE \@author \par} 
+\vspace*{1em}
+{\LARGE \@institute \par} 
+\vspace*{1em}
+{\LARGE \@date \par} 
+}}
+
 \maketitle
 
 \begin{columns}
@@ -67,6 +107,8 @@
 \draw [arrow] (nodejs) -- (systemapi) node[midway, fill=white] {\circled{5}Interact with};
 
 \end{tikzpicture}    
+
+Electron is built on Node.js and provides an environment to run a web-like application with access to system API. Developer writes code in HTML, CSS and JavaScript and deploys using the Electron framework.
 
     }
     
@@ -136,6 +178,11 @@
 
 \end{tikzpicture}
 
+F\# is used to implement the application. However, the Electron framework accepts JavaScript hence a compiler is needed to transpile F\# to JavaScript. Fable is the chosen compiler and the output JavaScript code is bundled by webpack. Fable also allows F\# to interop with JavaScript. Therefore, using JavaScript library is made possible.
+
+HTML and CSS is still needed for configuring and styling the GUI layout. The elements on the GUI and their styles can be changed via F\# using the \textit{Fable.Import} package.
+
+\textit{JointJS} is the selected JavaScript library for implementing the block diagram editor.
     }
  
     \column{0.33}
@@ -179,11 +226,12 @@
 
 \end{tikzpicture}    
 
-The application can have multiple renderer processes but only have one main process. Each process corresponds to one F\# project.
+The application can have multiple renderer processes but only have one main process. Each process corresponds to one F\# project. The implementation has three F\# projects, \textit{Main} (correspond to the Electron main process), \textit{Renderer} (correspond to the GUI of the main window) and \textit{blockConfigureWindow} (correspond to the window for creating new blocks using truth tables).
     }
     
     \block{Application Windows}
     {
+The following diagram shows the GUI of the main window. The style of the menu bar adapts to the operating system and has keyboard shortcut support.
 
 \begin{tikzpicture}[node distance=1.5cm]
 
@@ -215,7 +263,7 @@ The application can have multiple renderer processes but only have one main proc
 
 \tikzstyle{arrow} = [thick,->,>=stealth]
 
-The above shows the main window and the below shows the window for creating basic logic blocks:
+The diagram below shows the window for creating basic logic blocks using truth tables. The window allows user to create blocks using truth table. To create blocks by combining other blocks, user needs to use the block diagram editor, i.e. the main window.
 
 \begin{tikzpicture}[node distance=1.5cm][Window to add basic logic blocks]
 
@@ -291,7 +339,7 @@ The above shows the main window and the below shows the window for creating basi
 
 \end{tikzpicture}
 
-There is also an About window to display information on author and versions of libraries. It is not put in a dedicated F\# project but instead implemented using the \textit{dialog.showMessageBox} API from Electron.
+There is also an About window to display information on author and versions of libraries. It is not put in a separate F\# project but instead implemented using the Electron \textit{dialog.showMessageBox} API.
     }
 
     \column{0.33}
@@ -301,7 +349,6 @@ There is also an About window to display information on author and versions of l
 
 \tikzstyle{arrow} = [thick,->,>=stealth]
 
-\centering
 \begin{tikzpicture}[node distance=3cm]
 
 \node (truthtable) [block] {Truth table};
@@ -327,6 +374,8 @@ There is also an About window to display information on author and versions of l
 \draw [arrow] (highlevelblocks) -- (highleveldesign);
 
 \end{tikzpicture}
+
+User can create basic logic blocks using truth tables. Such blocks are added to the available block list and can be added to the canvas. The design in the canvas can be used to generate a single block as well. Every time a block is generated, the graphical representation of the block as well as the Verilog code of the block are saved to files. User can also save the design only without generating blocks.
     }
     
     \block{IPC}
@@ -362,7 +411,7 @@ There is also an About window to display information on author and versions of l
 \draw [arrow] (systemAPI) -- ++ (0, -1) -- ++ (-7, 0) node[midway, fill=white] {\circled{3}Response} -- (main);
 
 \end{tikzpicture}
-
+.
 \begin{tikzpicture}[node distance=3cm]
 
 \node (renderer1) [block] {Renderer process 1};
@@ -377,9 +426,25 @@ There is also an About window to display information on author and versions of l
 
 \end{tikzpicture}
 
-IPC is the abbreviation for Inter-Process Communication. It is used when the communication between processes is needed. The application uses IPC to pass information between windows using the main process as a relay.
+An alternative way is to replace \textit{IPCRenderer} with the \textit{Remote} module. \\
 
-Note that for communication between two renderer processes, the \textit{remote} module is an alternative way to access the main process as a relay.
+\begin{tikzpicture}[node distance=3cm]
+
+\node (renderer1) [block] {Renderer process 1};
+
+\node (main) [block, right of=renderer, xshift=6cm] {Main process};
+
+\node (renderer2) [block, right of=main, xshift=6cm] {Renderer process 2};
+
+\draw [arrow] (renderer1) -- (main) node[midway, fill=white] {\circled{1}\textit{Remote}};
+
+\draw [arrow] (main) -- (renderer2) node[midway, fill=white] {\circled{2}\textit{IPCMain}};
+
+\end{tikzpicture}
+
+IPC is the abbreviation for Inter-Process Communication. In Electron, main and renderer processes are separated from each other. The main process handles system API and the renderer process handles GUI events. IPC is used when the communication between processes is needed. 
+
+At the moment, Electron has not implemented a direct way for two renderer processes to communicate directly. Communication between renderer processes needs to be relayed by the main process. The application has multiple windows and uses IPC to pass information between those windows.
 
     }
     
